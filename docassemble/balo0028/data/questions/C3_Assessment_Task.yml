@@ -1,0 +1,158 @@
+---
+variable name: OBperson_info
+use objects: True
+data:
+  - Name: Olympia
+    Age: 21
+    Hobbies: Drawing
+    Do you like animals?: True
+  - Name: Maria
+    Age: 28
+    Hobbies: Caring for her small human
+    Do you like animals?: True
+  - Name: Frank
+    Age: 33
+    Hobbies: Designing and vaping
+    Do you like animals?: True
+  - Name: Matthew
+    Age: 58
+    Hobbies: Soccer
+    Do you like animals?: True
+  - Name: Elsa
+    Age: 56
+    Hobbies: Helping people
+    Do you like animals?: True
+
+---
+code: |
+  OBperson_info = [
+    {'Name':'Olympia', 'Age':21, 'Hobbies':'Drawing', 'Do you like animals?':True},
+    {'Name':'Maria', 'Age':28, 'Hobbies':'Caring for her small human', 'Do you like animals?':True},
+    {'Name':'Frank', 'Age':33, 'Hobbies':'Designing and vaping', 'Do you like animals?':True},
+    {'Name':'Matthew', 'Age':58, 'Hobbies':'Soccer', 'Do you like animals?':True},
+    {'Name':'Elsa', 'Age':56, 'Hobbies':'Helping people', 'Do you like animals?':True},
+  ]
+---
+mandatory: True
+question:  Data table
+subquestion: |
+  
+  ${ OBcolumn_header }
+  ${ OBdashes }
+  %for OBitem in OBtable_rows:
+  ${ OBitem }
+  %endfor
+
+attachment:
+  docx template file: Family_Table.docx
+  valid formats:
+    - pdf
+buttons:
+  - Continue: continue
+features:
+  css: Colours.css
+  debug: True
+  hide standard menu: False
+---
+objects:
+  - OBlogo: DAStaticFile.using(filename='simpsonsdonut.png')
+---
+mandatory: True
+code: |
+  set_parts(logo='<img src="' + OBlogo.url_for() + '" style="height: 50px;">')
+---
+code: |
+  OBcolumn_header = ""
+  
+  for OBitem in OBperson_info[0]:
+    OBcolumn_header += OBitem + '|'
+  
+  OBcolumn_header = OBcolumn_header[:-1]
+---
+code: |
+  OBdashes = "---"
+  for i in range(len(OBperson_info[0]) - 1):
+    OBdashes += "|---"
+---
+code: | 
+  OBtable_rows = []
+  
+  for OBitem in OBperson_info:
+      MDrow = ""
+      for OBkey in OBitem:
+        MDrow += str(OBitem[OBkey]) + '|'
+      MDrow = MDrow[:-1]
+      OBtable_rows.append(MDrow)
+
+---
+variable name: OBquestions
+use objects: True
+data:
+  - OBquestion: Is Olympias data correct?
+    datatype: checkboxes
+    OBchoices:
+      - Name is Olympia
+      - Age is 21
+      - Hobby is drawing
+      - Likes animals
+  - OBquestion: Is Marias data correct?
+    datatype: checkboxes
+    OBchoices:
+      - Name is Maria
+      - Age is 28
+      - Hobby is caring for her small human
+      - Likes animals
+  - OBquestion: Is Franks data correct?
+    datatype: checkboxes
+    OBchoices:
+      - Name is Frank
+      - Age is 33
+      - Hobbies are designing and vaping
+      - Likes animals
+  - OBquestion: Is Matthews data correct?
+    datatype: checkboxes
+    OBchoices:
+      - Name is Matthew
+      - Age is 58
+      - Hobby is Soccer
+      - Likes animals
+  - OBquestion: Is Elsas data correct?
+    datatype: checkboxes
+    OBchoices:
+      - Name is Elsa
+      - Age is 56
+      - Hobby is helping people
+      - Likes animals
+---
+mandatory: True
+question: Family Data Table
+subquestion: |
+  #### Here is the result of your checkbox selection
+  
+  ${ OBquestion_table }
+  
+attachment:
+  docx template file: Family_Table.docx
+  valid formats:
+    - pdf
+buttons:
+  - Exit: exit
+  - Restart: restart
+---
+table: OBquestion_table
+rows: OBquestions
+columns:
+  - Question: |
+      row_item['OBquestion']
+  - Selected answers: |
+      row_item['OBanswers'].true_values()
+  - No. Selected answers: |
+      len(row_item['OBanswers'].true_values())
+---
+question: |
+  ${ OBquestions[i]['OBquestion'] }
+fields:
+  - no label: OBquestions[i]['OBanswers']
+    datatype: checkboxes
+    code: OBquestions[i]['OBchoices']
+---

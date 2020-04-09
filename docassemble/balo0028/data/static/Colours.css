@@ -1,0 +1,33 @@
+.navbar{
+    background-color: rgb(160,214,190) !important;
+}
+
+.navbar .nav-item a{
+    color: rgb(236,79,132) !important;
+}
+
+.navbar .dropdown-menu{
+    background-color: rgba(236,79,132);
+}
+
+.btn-primary{
+  color: rgb(255,255,255);
+  background-color: rgb(247, 164, 190);
+  border-color: rgb(255,255,255);  
+}
+
+.btn-primary:hover{
+  color: rgb(0,0,0);
+  background-color: rgba(250,243,128);
+  border-color: rgb(0,0,0);
+}
+
+.dropdown-item:hover{
+    background-color: rgba(267,145,193);
+}
+
+.btn-primary:hover{
+  color: rgb(0,0,0);
+  background-color: rgba(250,236,54);
+  border-color: rgb(160,214,190);
+}
